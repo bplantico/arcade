@@ -15,6 +15,7 @@ router.get("/", function(req, res, next) {
     });
 });
 
+/* GET one game */
 router.get("/:id", function(req, res, next) {
   Game.findAll({
     where: {
@@ -28,6 +29,41 @@ router.get("/:id", function(req, res, next) {
     .catch(error => {
       res.setHeader("Content-Type", "application/json");
       res.status(500).send({error})
+    });
+});
+
+/* POST to create a game */
+router.post("/", function(req, res, next) {
+  Game.create({
+          title: req.body.title,
+          price: req.body.price,
+          releaseYear: req.body.releaseYear,
+          active: req.body.active
+    })
+    .then(game => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(201).send(JSON.stringify(game));
+    })
+    .catch(error => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(500).send({ error });
+    });
+});
+
+/* DELETE to destroy a game */
+router.delete("/:id", function(req, res, next) {
+  Game.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(game => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(204);
+    })
+    .catch(error => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(500).send({ error });
     });
 });
 
